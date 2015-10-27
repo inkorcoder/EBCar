@@ -1,0 +1,209 @@
+/*
+	@module
+		title: grid *n
+		type: scss *n
+		caption:
+			p{ Модуль формирует сетку исходя из конфига bd{_config.scss} }p
+		*n
+*/
+
+@import "config.scss";
+@import "_calc.scss";
+
+/*@property
+		name: g *n
+		caption: p{ Класс bd{ .g } означает обертку. bd{ .g.w960 } - обертку 
+			шириной в w960 пикселей, если скрин пользователя шире данного 
+			значения, – блок позиционируется по центру, если меньше – 
+			растягивается на всю ширину скрина. Ширина задается один раз и 
+			берется из конфига (параметр bd{ $grid_sizes }). Каждое из этих 
+			значений - это ширина обертки, которую Вы можете использовать. 
+			Это и обертка шириной в 1400 пикселей (bd{ w1400 }), и в 960 (bd{ w960 }) 
+		}p
+		p{ Обертка является оболочкой, внутри которой должны размещаться ячейки. }p
+		*n
+*/
+.g,
+.g--rev {
+	box-sizing:border-box;
+	display: block;
+	margin: 0 auto;
+	padding: 0;
+	list-style-type: none;
+}
+.g {
+	direction: ltr;
+}
+
+/*@property
+		name: g--rev *n
+		caption: Обертка с обратным расположением ячеек 
+		(только для inline-block-элементов). *n
+*/
+.g--rev {
+	direction: rtl;
+}
+
+/*@property
+		name: c, cc, cd *n
+		caption: p{ Для того, чтобы раздробить блок на условные ячейки, 
+			внутрь нужно поместить блок с классом bd{.c} или bd{.cc}. Класс 
+			bd{.c} обозначает инлайн-блок, с внутренним отступом по бокам в 
+			заданную величину пикселей (параметр bd{ $gutter }). 
+		}p
+		p{ [$gutter|<content here>|$gutter] }p
+		p{ Дробить сетку на ячейки крайне просто, если Вы знаете азы 
+			математики и умеете слогать. Для начала вы должны определиться, 
+			на сколько ячеек Вы хотите разбить сетку. За это отвечает 
+			параметр bd{ $grid_calc } .Например, Вы выбрали 12-колоночную 
+			сетку. Это означает, что любая ячейка будет дробиться исходя 
+			из соотношения ширины ячейки к общей ширине всех ячеек: класс 
+			bd{ x2d12 } вставит ячейку шириной в 2/12 общей ширины обертки.
+		}p
+		p{ Плюшка: Вы так же можете использовать не только дроби со 
+			знаменателем 12 (если Вы его выбрали), но и любые дроби, из 
+			параметра bd{ $grid_calc }. Это может быть и bd{ .x1d2 }, и 
+			bd{ .x2d6 }, и bd{ .x1d8 }, если эти дроби прописаны в 
+			bd{ $grid_calc }.
+		}p
+		p{ Так же, существует возможность задать фиксированную ширину, 
+			используя классы типа bd{ .w-fixed-50 }, bd{ .w-fixed-150 }, 
+			которые обозначают фиксированную ширину блока в пикселях. 
+			Значения берутся из параметра bd{ $fixed_widths }.
+		}p
+		p{ Обертка является оболочкой, внутри которой должны 
+			размещаться ячейки. }p
+		*n
+*/
+.c,
+.cc,
+.cd {
+	box-sizing:border-box;
+	display: inline-block;
+	vertical-align: top;
+	padding: 0 $gutter;
+}
+
+/*@property
+		name: cc *n
+		caption: Ячейка без отступов - [<content here>]*n
+*/
+.cc {
+	padding: 0;
+}
+
+/*@property
+		name: cc *n
+		caption: Ячейка с отступами в два раза больше обычного: 
+		p{ [$gutter*2|<content here>|$gutter*2] }p *n
+*/
+.cd {
+	padding: 0 $gutter*2;
+}
+
+/* внутренние фцнкции - поддержка javascript */
+.lt-ie9 .c,
+.lt-ie9 .cc,
+.no-js .c,
+.no-js .cc,
+.no-js .c-c{
+	display: block !important;
+	width: 100% !important;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+/* внутренние фцнкции - переключение в режим flexbox \ inline-block */
+.flexbox {
+	article,
+	aside,
+	details,
+	figcaption,
+	figure,
+	footer,
+	header,
+	hgroup,
+	main,
+	menu,
+	nav,
+	section,
+	summary,
+	div,
+	ul,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		/*align-self: flex-start;*/
+		flex: 1 auto;
+		/*@include align-items(center);*/
+	}
+
+	.g, .g-rev {
+		margin: 0 auto;
+		display: flex;
+		align-items: stretch;
+		box-sizing: border-box;
+		align-items: top;
+		align-content: flex-start;
+		flex-wrap: wrap;
+	}
+	.c, .cc, .c-c {
+		display: inline-flex;
+		/*align-items: center;*/
+		align-self: flex-start;
+		flex-wrap: wrap;
+		box-sizing: border-box;
+	}
+}
+
+/*@property
+		name: w<WIDTH> *n
+		caption: Ширина обертки. Формирует список классов типа 
+		w<WIDTH> исходя из значений параметра bd{ $grid_sizes } *n
+*/
+@each $greed in $grid_sizes {
+	.g.w#{$greed},
+	.g--rev.w#{$greed}{
+		max-width: #{$greed}px;
+	}
+}
+
+@each $greed in $grid_sizes {
+	.lt-ie9 .g.w#{$greed},
+	.lt-ie9 .g--rev.w#{$greed}{
+		max-width: #{$greed}px;
+	}
+	.no-js .g.w#{$greed},
+	.no-js .g--rev.w#{$greed}{
+		max-width: #{$greed}px;
+	}
+}
+
+/* -----------------------------------------------------
+	grid calc
+*/
+
+@include grid-calc($grid_calc);
+
+/* -----------------------------------------------------
+	fixed widths
+*/
+
+@each $width in $fixed_widths {
+	.w-fixed-#{$width} {
+		width: #{$width}px;
+	}
+}
+
+/* -----------------------------------------------------
+	MEDIA queries
+*/
+
+@each $prefix in $grid_prefixes {
+	@media (max-width: #{nth($prefix,1)}px) {
+		@include grid-calc($grid-calc, #{nth($prefix,2)});
+	}
+}
