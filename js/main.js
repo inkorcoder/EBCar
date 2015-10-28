@@ -138,10 +138,9 @@ function init(type) {
   mesh = new THREE.Mesh( new THREE.BoxGeometry( 10, 10, 10 ), material );
   sceneCube.add( mesh );
   plane.rotation.x = deg2rad(-90);
-  plane.receiveShadow = false;
-
-  plane.receiveShadow = true;
+  // plane.receiveShadow = false;
   scene.add( plane );
+  plane.receiveShadow = true;
 
   // renderer = new THREE.WebGLRenderer(); // featuresAnimationFrame
   if (type == 'slow'){

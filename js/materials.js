@@ -7,10 +7,10 @@ var textureCube = THREE.ImageUtils.loadTextureCube( urls );
 textureCube.format = THREE.RGBFormat;
 
 
-light = new THREE.SpotLight(0xdfebff, 1.75);
+light = new THREE.SpotLight(0xdfebff, 1.2);
 light.position.set(500, 1500, 300);
 light.castShadow = true;
-light.shadowCameraVisible = false;
+// light.shadowCameraVisible = true;
 light.shadowMapWidth = 2048;
 light.shadowMapHeight = 2048;
 var d = 500;
@@ -20,6 +20,7 @@ light.shadowCameraTop = d;
 light.shadowCameraBottom = -d;
 light.shadowCameraFar = 3000;
 light.shadowDarkness = 0.9;
+// light.shadowBias = 0.0015;
 
 
 
